@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Indicators — Prop Bruh</title>
+<meta name="description" content="Custom TradingView indicators from Rouse Trading Group (RTG), built around The Prop Bruh Method. ORB, ATR, SphinxFib, and volume tools for serious futures traders." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a0616;
+    --bg-panel: #17102a;
+    --bg-panel-2: #1f1635;
+    --line: #2d2148;
+    --text: #f0ecf7;
+    --text-dim: #9a8fb8;
+    --royal-purple: #4b2e83;
+    --royal-purple-light: #6b46c1;
+    --royal-purple-deep: #331c5c;
+    --old-gold: #cfb53b;
+    --old-gold-light: #e5cc5a;
+    --old-gold-deep: #a68f27;
+    --green: #2ecc71;
+    --red: #ff4f5e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 80% 20%, rgba(207,181,59,0.5), transparent),
+      radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(2px 2px at 90% 50%, rgba(107,70,193,0.4), transparent),
+      radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.3), transparent),
+      radial-gradient(ellipse at top, rgba(75,46,131,0.18), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(207,181,59,0.06), transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(12px);
+    background: rgba(10,6,22,0.75);
+    border-bottom: 1px solid var(--line);
+    z-index: 100;
+  }
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: var(--old-gold);
+    text-decoration: none;
+  }
+  .logo span { color: var(--text); }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--old-gold); }
+  .nav-links a.active { color: var(--old-gold); }
+
+  .cta-btn {
+    background: var(--old-gold);
+    color: var(--royal-purple-deep);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-block;
+  }
+  .cta-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(207,181,59,0.4);
+  }
+
+  /* Page hero */
+  .page-hero {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  .page-hero-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--old-gold);
+    border: 1px solid var(--old-gold-deep);
+    background: rgba(75,46,131,0.25);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .page-hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+  }
+  .page-hero h1 .highlight {
+    color: var(--old-gold);
+  }
+  .page-hero p {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* Section headers */
+  section.block { padding: 60px 0; }
+  .section-header {
+    margin-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .section-header-left .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--old-gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .section-header-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    line-height: 1.1;
+  }
+  .section-header-right {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Indicator grid */
+  .indicator-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 768px) {
+    .indicator-grid { grid-template-columns: 1fr; }
+  }
+
+  .indicator {
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .indicator:hover {
+    transform: translateY(-4px);
+    border-color: var(--old-gold-deep);
+    box-shadow: 0 14px 40px rgba(75,46,131,0.4);
+  }
+  .indicator::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--old-gold), var(--royal-purple-light), transparent);
+  }
+
+  .indicator-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+  .indicator h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    color: var(--text);
+    line-height: 1.2;
+    flex: 1;
+  }
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge-free {
+    background: rgba(46, 204, 113, 0.15);
+    color: var(--green);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+  }
+  .badge-paid {
+    background: rgba(207, 181, 59, 0.15);
+    color: var(--old-gold);
+    border: 1px solid var(--old-gold-deep);
+  }
+
+  .indicator-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .indicator p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+
+  .indicator-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.15s;
+    align-self: flex-start;
+  }
+  .indicator-cta-free {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid rgba(46, 204, 113, 0.5);
+  }
+  .indicator-cta-free:hover {
+    background: rgba(46, 204, 113, 0.1);
+    border-color: var(--green);
+  }
+  .indicator-cta-paid {
+    background: var(--old-gold);
+    color: var(--royal-purple-deep);
+    border: 1px solid var(--old-gold);
+  }
+  .indicator-cta-paid:hover {
+    background: var(--old-gold-light);
+    box-shadow: 0 6px 20px rgba(207,181,59,0.4);
+  }
+
+  /* Info band about RTG */
+  .info-band {
+    margin: 60px 0;
+    padding: 36px;
+    background: linear-gradient(135deg, var(--bg-panel), var(--royal-purple-deep));
+    border: 1px solid var(--royal-purple);
+    border-radius: 14px;
+  }
+  .info-band h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    color: var(--old-gold);
+    margin-bottom: 10px;
+  }
+  .info-band p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    max-width: 760px;
+  }
+
+  /* CTA band */
+  .cta-band {
+    margin: 80px 0 40px;
+    padding: 50px 40px;
+    background: linear-gradient(135deg, rgba(75,46,131,0.4), rgba(207,181,59,0.12));
+    border: 1px solid var(--old-gold-deep);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .cta-band h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    margin-bottom: 12px;
+  }
+  .cta-band p {
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0;
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+  footer .disclaimer {
+    max-width: 700px;
+    margin: 16px auto 0;
+    font-size: 0.8rem;
+    color: #6b6088;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .page-hero { padding: 50px 0 40px; }
+    .cta-band { padding: 36px 24px; }
+    .info-band { padding: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a href="/" class="logo">PROP <span>BRUH</span></a>
+    <ul class="nav-links">
+      <li><a href="/#method">The Method</a></li>
+      <li><a href="/#mentorship">Mentorship</a></li>
+      <li><a href="/#courses">Courses</a></li>
+      <li><a href="/indicators" class="active">Indicators</a></li>
+      <li><a href="/#tools">Tools</a></li>
+    </ul>
+    <a href="https://calendly.com/dcheadshots/consult15" class="cta-btn" target="_blank">Book a Call</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="page-hero-tag">// RTG • TRADINGVIEW • PINE SCRIPT</span>
+    <h1>
+      Indicators By
+      <span class="highlight">Rouse Trading Group</span>
+    </h1>
+    <p>
+      Custom TradingView indicators built around The Prop Bruh Method. Visualize ORB ranges, SphinxFib levels, ATR context, and volume signals on every chart. Some free, some paid, all built by a trader who actually uses them.
+    </p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="container">
+
+    <div class="section-header">
+      <div class="section-header-left">
+        <span class="tag">// FREE INDICATORS</span>
+        <h2>Start Here. No Cost.</h2>
+      </div>
+      <div class="section-header-right">
+        [ Free for the community ]
+      </div>
+    </div>
+
+    <div class="indicator-grid">
+
+      <div class="indicator">
+        <div class="indicator-head">
+          <h3>RTG Clock + Candle + Countdown</h3>
+          <span class="badge badge-free">Free</span>
+        </div>
+        <div class="indicator-meta">TradingView • Pine Script v6</div>
+        <p>
+          A clean chart overlay with a live session clock, current candle timer, and countdown to the next candle close. Never guess how long is left in a bar again, critical for ORB and SphinxFib timing.
+        </p>
+        <a href="#" class="indicator-cta indicator-cta-free">Coming Soon →</a>
+      </div>
+
+      <div class="indicator">
+        <div class="indicator-head">
+          <h3>Volume Candle Highlighter</h3>
+          <span class="badge badge-free">Free</span>
+        </div>
+        <div class="indicator-meta">TradingView • Pine Script v6</div>
+        <p>
+          Automatically highlights high-volume candles in real time so you can spot institutional participation, climactic moves, and volume-backed breakouts at a glance.
+        </p>
+        <a href="#" class="indicator-cta indicator-cta-free">Coming Soon →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="container">
+
+    <div class="section-header">
+      <div class="section-header-left">
+        <span class="tag">// PAID INDICATORS</span>
+        <h2>The Real Work.</h2>
+      </div>
+      <div class="section-header-right">
+        [ Premium RTG tools ]
+      </div>
+    </div>
+
+    <div class="indicator-grid">
+
+      <div class="indicator">
+        <div class="indicator-head">
+          <h3>RTG ORB + ATR Mega Mix</h3>
+          <span class="badge badge-paid">Paid</span>
+        </div>
+        <div class="indicator-meta">TradingView • Pine Script v6</div>
+        <p>
+          The complete ORB trading companion. Auto-draws opening range boxes for every session, overlays ATR-based targets and stops, and flags breakout direction. Everything The Prop Bruh Method needs to execute the ORB pillar, in one indicator.
+        </p>
+        <a href="#" class="indicator-cta indicator-cta-paid">Coming Soon →</a>
+      </div>
+
+      <div class="indicator">
+        <div class="indicator-head">
+          <h3>RTG SphinxFib Indicator v1.2</h3>
+          <span class="badge badge-paid">Paid</span>
+        </div>
+        <div class="indicator-meta">TradingView • Pine Script v5</div>
+        <p>
+          Automated SphinxFib level plotting with confluence zones and entry triggers. Built directly from the method taught by Sphinx Trading on YouTube, ready to deploy on any futures chart without manual level drawing.
+        </p>
+        <a href="#" class="indicator-cta indicator-cta-paid">Coming Soon →</a>
+      </div>
+
+    </div>
+
+    <div class="info-band">
+      <h3>What is RTG?</h3>
+      <p>
+        Rouse Trading Group (RTG) is the research and development arm behind Prop Bruh. Every indicator is built for working traders, tested live across futures markets, and designed to support the three pillars of The Prop Bruh Method: SphinxFib, ORB, and Support &amp; Resistance. Credit for the SphinxFib methodology goes to <a href="https://www.youtube.com/@sphinxtrading2186" target="_blank" style="color: var(--old-gold);">Sphinx Trading on YouTube</a>.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<div class="container">
+  <div class="cta-band">
+    <h2>Want To Be Notified When These Drop?</h2>
+    <p>Book a free consult and I'll put you on the early access list for both the free and paid indicators.</p>
+    <a href="https://calendly.com/dcheadshots/consult15" class="cta-btn" target="_blank">Book My Free Consult</a>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <a href="/" class="logo">PROP <span>BRUH</span></a>
+    <p style="margin-top: 12px;">© 2026 Prop Bruh. All rights reserved.</p>
+    <p class="disclaimer">
+      Futures trading involves substantial risk of loss and is not suitable for all investors. Past performance is not indicative of future results. Nothing on this site is financial advice. Educational content only. SphinxFib method credit to Sphinx Trading on YouTube.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
