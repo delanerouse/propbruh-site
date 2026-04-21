@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Why NY Lunch Kills Volume</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --black:#080a0e;
+  --dark:#0d1117;
+  --surface:#131820;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.12);
+  --text:#c8d0e0;
+  --text2:#6b7a96;
+  --text3:#38445a;
+  --red:#e84040;
+  --red-dim:rgba(232,64,64,0.08);
+  --red-mid:rgba(232,64,64,0.18);
+  --amber:#e8a020;
+  --amber-dim:rgba(232,160,32,0.08);
+  --green:#20c878;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
+  --display:'Bebas Neue',sans-serif;
+}
+html,body{background:var(--black);min-height:100vh;}
+body{font-family:var(--sans);color:var(--text);padding:3rem 2rem;}
+
+.poster{max-width:780px;margin:0 auto;position:relative;}
+
+/* top rule */
+.top-rule{display:flex;align-items:center;gap:12px;margin-bottom:2.5rem;}
+.rule-line{flex:1;height:1px;background:var(--border2);}
+.rule-tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;}
+
+/* headline */
+.headline-block{margin-bottom:2.5rem;position:relative;}
+.kicker{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.kicker::before{content:'';display:inline-block;width:20px;height:1px;background:var(--red);}
+.headline{font-family:var(--display);font-size:clamp(52px,8vw,88px);line-height:0.92;letter-spacing:0.01em;color:#fff;text-transform:uppercase;}
+.headline em{color:var(--red);font-style:normal;}
+.subhead{font-size:14px;color:var(--text2);font-weight:300;line-height:1.6;margin-top:16px;max-width:520px;border-left:2px solid var(--red);padding-left:14px;}
+
+/* time bar */
+.time-bar{display:flex;align-items:stretch;margin-bottom:2.5rem;border:1px solid var(--border);border-radius:4px;overflow:hidden;font-family:var(--mono);}
+.time-seg{flex:1;padding:10px 14px;font-size:11px;}
+.time-seg .t-label{color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;font-size:9px;margin-bottom:3px;}
+.time-seg .t-val{color:var(--text);font-size:12px;font-weight:500;}
+.time-seg.active{background:var(--red-dim);border-left:2px solid var(--red);}
+.time-seg.active .t-label{color:var(--red);}
+.time-seg.active .t-val{color:var(--red);}
+.time-seg.recover{background:var(--amber-dim);border-left:2px solid var(--amber);}
+.time-seg.recover .t-label{color:var(--amber);}
+.time-seg.recover .t-val{color:var(--amber);}
+
+/* reasons grid */
+.reasons{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2.5rem;}
+.reason{background:var(--dark);padding:1.5rem;position:relative;overflow:hidden;}
+.reason::before{content:attr(data-n);font-family:var(--display);font-size:80px;color:rgba(255,255,255,0.02);position:absolute;top:-10px;right:12px;line-height:1;pointer-events:none;}
+.reason-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.reason-tag::before{content:'';width:12px;height:1px;display:inline-block;}
+.reason.r1 .reason-tag{color:var(--red);}
+.reason.r1 .reason-tag::before{background:var(--red);}
+.reason.r2 .reason-tag{color:#5b9cf6;}
+.reason.r2 .reason-tag::before{background:#5b9cf6;}
+.reason.r3 .reason-tag{color:var(--amber);}
+.reason.r3 .reason-tag::before{background:var(--amber);}
+.reason.r4 .reason-tag{color:#a78bfa;}
+.reason.r4 .reason-tag::before{background:#a78bfa;}
+.reason.r5{grid-column:1/-1;background:var(--surface);}
+.reason.r5 .reason-tag{color:var(--green);}
+.reason.r5 .reason-tag::before{background:var(--green);}
+.reason-title{font-size:15px;font-weight:500;color:#fff;margin-bottom:8px;line-height:1.3;}
+.reason-body{font-size:13px;color:var(--text2);line-height:1.65;font-weight:300;}
+.reason-body strong{color:var(--text);font-weight:500;}
+
+/* self-reinforcing special layout */
+.reason.r5{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:start;}
+.r5-cycle{display:flex;flex-direction:column;align-items:center;gap:0;font-family:var(--mono);font-size:10px;color:var(--green);min-width:120px;}
+.r5-node{border:1px solid rgba(32,200,120,0.3);background:rgba(32,200,120,0.06);padding:6px 12px;border-radius:2px;text-align:center;letter-spacing:0.04em;width:100%;}
+.r5-arrow{color:rgba(32,200,120,0.4);font-size:14px;line-height:1;padding:2px 0;}
+.r5-content{}
+
+/* recovery bar */
+.recovery-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--amber);padding:1.25rem 1.5rem;margin-bottom:2.5rem;display:flex;align-items:flex-start;gap:1.25rem;}
+.recovery-time{font-family:var(--display);font-size:36px;color:var(--amber);line-height:1;white-space:nowrap;}
+.recovery-text{font-size:13px;color:var(--text2);line-height:1.65;font-weight:300;}
+.recovery-text strong{color:var(--text);font-weight:500;}
+
+/* bottom rule */
+.bottom-rule{display:flex;align-items:center;justify-content:space-between;padding-top:1.5rem;border-top:1px solid var(--border);}
+.bottom-tag{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;}
+.bottom-brand{font-family:var(--display);font-size:18px;letter-spacing:0.08em;color:var(--text3);}
+.bottom-brand span{color:var(--red);}
+
+/* stagger animation */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.poster>*{animation:fadeUp 0.5s ease both;}
+.top-rule{animation-delay:0s;}
+.headline-block{animation-delay:.08s;}
+.time-bar{animation-delay:.16s;}
+.reasons{animation-delay:.24s;}
+.recovery-block{animation-delay:.32s;}
+.bottom-rule{animation-delay:.4s;}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="top-rule">
+    <div class="rule-line"></div>
+    <div class="rule-tag">ES / MES · Session Analysis</div>
+    <div class="rule-line"></div>
+  </div>
+
+  <div class="headline-block">
+    <div class="kicker">Know your enemy</div>
+    <div class="headline">Why NY<br>Lunch <em>kills</em><br>volume</div>
+    <div class="subhead">12:00 PM – 1:00 PM ET is one of the worst windows to trade ES/MES. Here is exactly why — and when it comes back.</div>
+  </div>
+
+  <div class="time-bar">
+    <div class="time-seg">
+      <div class="t-label">Pre-market open</div>
+      <div class="t-val">8:00 AM ET</div>
+    </div>
+    <div class="time-seg">
+      <div class="t-label">RTH open</div>
+      <div class="t-val">9:30 AM ET</div>
+    </div>
+    <div class="time-seg">
+      <div class="t-label">Morning session ends</div>
+      <div class="t-val">11:30 AM ET</div>
+    </div>
+    <div class="time-seg active">
+      <div class="t-label">Dead zone</div>
+      <div class="t-val">12:00 – 1:00 PM</div>
+    </div>
+    <div class="time-seg recover">
+      <div class="t-label">Volume returns</div>
+      <div class="t-val">1:00 – 1:30 PM</div>
+    </div>
+  </div>
+
+  <div class="reasons">
+
+    <div class="reason r1" data-n="01">
+      <div class="reason-tag">Human behavior</div>
+      <div class="reason-title">New York desks go dark</div>
+      <div class="reason-body">The traders running the biggest desks at <strong>major banks, hedge funds, and market makers</strong> physically leave between noon and 1pm. These are the institutional participants whose order flow drives directional momentum on ES. When they step away, the orders stop flowing. It's that simple.</div>
+    </div>
+
+    <div class="reason r2" data-n="02">
+      <div class="reason-tag">Market structure</div>
+      <div class="reason-title">London closes its session</div>
+      <div class="reason-body">London is the second-largest financial center in the world and a <strong>major source of ES volume</strong> during the morning session. By noon New York time it's 5pm in London. Their session is over. That entire pool of institutional participation disappears at the exact same time New York goes to lunch.</div>
+    </div>
+
+    <div class="reason r3" data-n="03">
+      <div class="reason-tag">Liquidity</div>
+      <div class="reason-title">Market makers pull back</div>
+      <div class="reason-body">Firms that provide liquidity — sitting on both sides of the market constantly — <strong>reduce activity during lunch</strong> because getting caught in a large move with thin order books is dangerous. They widen spreads and reduce size. Less liquidity begets less liquidity.</div>
+    </div>
+
+    <div class="reason r4" data-n="04">
+      <div class="reason-tag">Catalysts</div>
+      <div class="reason-title">No news, no fuel</div>
+      <div class="reason-body">Major economic releases hit at <strong>8:30am, 9:00am, or 10:00am</strong>. By noon the morning data is priced in and the next meaningful catalyst — if there is one — is later in the afternoon. With nothing to react to and nobody to react to it, price just drifts.</div>
+    </div>
+
+    <div class="reason r5" data-n="05">
+      <div class="r5-cycle">
+        <div class="r5-node">Thin volume</div>
+        <div class="r5-arrow">↓</div>
+        <div class="r5-node">No one trades</div>
+        <div class="r5-arrow">↓</div>
+        <div class="r5-node">Stays thin</div>
+        <div class="r5-arrow">↓</div>
+        <div class="r5-node">Repeats daily</div>
+      </div>
+      <div class="r5-content">
+        <div class="reason-tag">Self-reinforcing cycle</div>
+        <div class="reason-title">Everyone knows, so nobody shows up</div>
+        <div class="reason-body">Experienced traders know lunch is thin, so they don't trade it. <strong>Because they don't trade it, it stays thin.</strong> Everyone knows everyone else knows — so nobody shows up, and the cycle repeats every single trading day. Your ORB edge requires momentum and institutional participation. Lunch has neither.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="recovery-block">
+    <div class="recovery-time">1:00–<br>1:30</div>
+    <div class="recovery-text"><strong>Volume returns as New York traders come back from lunch</strong> and start positioning for the afternoon session. That's when you see direction start to form again — but that's a different session with different dynamics than your 8am and 9:30am ORB windows. Your sessions are done by then. Close the charts.</div>
+  </div>
+
+  <div class="bottom-rule">
+    <div class="bottom-tag">12:00 PM – 1:00 PM ET · Do not trade</div>
+    <div class="bottom-brand">PROP <span>BRUH</span></div>
+  </div>
+
+</div>
+</body>
+</html>
