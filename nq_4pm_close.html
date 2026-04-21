@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Why 4 PM Kills Your Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0a0c0f;
+    --bg2:      #111317;
+    --bg3:      #181b20;
+    --border:   rgba(255,255,255,0.07);
+    --border2:  rgba(255,255,255,0.13);
+    --text:     #e2e4ea;
+    --text2:    #7a7f8e;
+    --text3:    #44474f;
+    --cyan:     #00d4c8;
+    --cyan-dim: rgba(0,212,200,0.12);
+    --gold:     #f5c842;
+    --gold-dim: rgba(245,200,66,0.1);
+    --red:      #f05050;
+    --red-dim:  rgba(240,80,80,0.1);
+    --green:    #3dd68c;
+    --green-dim:rgba(61,214,140,0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── NAV TAG ── */
+  .nav-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-tag .instrument {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(0,212,200,0.3);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+  .nav-tag .sep { color: var(--text3); font-size: 12px; }
+  .nav-tag .category {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+  }
+
+  .hero-kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text2);
+    font-weight: 300;
+    max-width: 540px;
+    line-height: 1.65;
+    margin-bottom: 3rem;
+  }
+
+  /* ── TIMELINE BAR ── */
+  .timeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 0;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .tl-item {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    border-right: 1px solid var(--border2);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tl-item:last-child { border-right: none; }
+  .tl-item.danger { background: var(--red-dim); border-right-color: rgba(240,80,80,0.2); }
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+  }
+  .tl-item.danger .tl-time { color: var(--red); }
+  .tl-label {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 300;
+  }
+  .tl-item.danger .tl-label { color: rgba(240,80,80,0.7); }
+
+  /* ── MAIN CONTENT ── */
+  .content {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ── REASON CARDS ── */
+  .reason {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 0;
+  }
+  .reason:first-child { border-top: 1px solid var(--border); margin-top: 4rem; }
+
+  .reason-meta {
+    padding-right: 2.5rem;
+    padding-top: 4px;
+  }
+  .reason-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.5rem;
+  }
+  .reason-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    color: var(--text2);
+    line-height: 1.2;
+  }
+
+  .reason-body { }
+  .reason-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .reason-headline em {
+    font-style: normal;
+    color: var(--cyan);
+  }
+  .reason-text {
+    font-size: 15px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.75;
+  }
+  .reason-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── PROP FIRM CALLOUT ── */
+  .prop-callout {
+    background: var(--gold-dim);
+    border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.25rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .prop-callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .prop-callout-text {
+    font-size: 14px;
+    color: rgba(245,200,66,0.85);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .prop-callout-text strong { color: var(--gold); font-weight: 500; }
+
+  /* ── CASCADE FLOW ── */
+  .cascade {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+  .cascade-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cascade-box {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    border: 1px solid rgba(240,80,80,0.3);
+    background: var(--red-dim);
+    padding: 5px 14px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .cascade-arrow {
+    color: var(--text3);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 0 4px 12px;
+  }
+
+  /* ── EXCEPTION BOX ── */
+  .exception {
+    background: var(--green-dim);
+    border: 1px solid rgba(61,214,140,0.2);
+    border-radius: 6px;
+    padding: 2rem;
+    margin-top: 4rem;
+  }
+  .exception-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .exception-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--green);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+  }
+  .exception-text {
+    font-size: 15px;
+    color: rgba(61,214,140,0.75);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+  .exception-text strong { color: var(--green); font-weight: 500; }
+
+  /* ── VERDICT ── */
+  .verdict {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border2);
+  }
+  .verdict-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .verdict-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.25rem;
+  }
+  .verdict-text em { font-style: normal; color: var(--red); }
+  .verdict-body {
+    font-size: 15px;
+    color: var(--text2);
+    font-weight: 300;
+    line-height: 1.75;
+    max-width: 560px;
+  }
+  .verdict-body strong { color: var(--text); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+  }
+  .footer-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── DO NOT TRADE BAR ── */
+  .dnt-bar {
+    background: var(--red-dim);
+    border: 1px solid rgba(240,80,80,0.25);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    margin-top: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .dnt-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .dnt-window {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--red);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 640px) {
+    .reason { grid-template-columns: 1fr; gap: 0.5rem; }
+    .reason-meta { padding-right: 0; padding-bottom: 0.5rem; }
+    .timeline { flex-direction: column; }
+    .tl-item { border-right: none; border-bottom: 1px solid var(--border2); }
+    .tl-item:last-child { border-bottom: none; }
+    .footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-tag">
+  <span class="instrument">NQ / MNQ</span>
+  <span class="sep">·</span>
+  <span class="category">Prop Firm Risk Management</span>
+</nav>
+
+<section class="hero">
+  <p class="hero-kicker">Know your enemy</p>
+  <h1>Why 4&nbsp;PM<br><em>kills</em><br>your account</h1>
+  <p class="hero-sub">The 4:00 PM ET close is not a trading opportunity — it is a <strong style="color:var(--text)">risk event</strong>. For NQ prop firm traders, holding into the close is one of the fastest ways to erase a profitable day or breach a drawdown threshold you spent weeks building.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <span class="tl-time">9:30 AM</span>
+      <span class="tl-label">RTH open</span>
+    </div>
+    <div class="tl-item">
+      <span class="tl-time">3:45 PM</span>
+      <span class="tl-label">Last clean entry</span>
+    </div>
+    <div class="tl-item danger">
+      <span class="tl-time">3:50–4:00 PM</span>
+      <span class="tl-label">Close all positions</span>
+    </div>
+    <div class="tl-item danger">
+      <span class="tl-time">4:00 PM</span>
+      <span class="tl-label">RTH closes · danger zone</span>
+    </div>
+    <div class="tl-item danger">
+      <span class="tl-time">4:00–5:00 PM</span>
+      <span class="tl-label">Earnings gap risk</span>
+    </div>
+  </div>
+</section>
+
+<main class="content">
+
+  <div class="reason">
+    <div class="reason-meta">
+      <p class="reason-tag">Institutional flow</p>
+      <p class="reason-title">Rebalancing chaos</p>
+    </div>
+    <div class="reason-body">
+      <p class="reason-headline">Institutions rebalance at the <em>bell</em></p>
+      <p class="reason-text">The final minutes of RTH are when mutual funds, pension desks, and large asset managers execute their end-of-day rebalancing orders. This order flow is <strong>non-directional and non-technical</strong> — it has nothing to do with support levels, breakouts, or momentum. NQ gets hit harder than ES here because the Nasdaq-100 carries a heavier concentration of high-beta tech names. A 40-point spike in the last 3 minutes is entirely normal. It just means somebody had to buy a lot of Apple.</p>
+      <div class="prop-callout">
+        <span class="prop-callout-label">Prop firm risk</span>
+        <p class="prop-callout-text">A single adverse candle during rebalancing can breach your <strong>daily loss limit</strong> or damage your <strong>trailing drawdown threshold</strong> — the evaluation work of an entire week erased in 90 seconds.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="reason-meta">
+      <p class="reason-tag">Market structure</p>
+      <p class="reason-title">Liquidity cliff</p>
+    </div>
+    <div class="reason-body">
+      <p class="reason-headline">Liquidity drops a <em>cliff</em> at 4 PM</p>
+      <p class="reason-text">The 4:00–5:00 PM window is the transition from RTH to CME Globex electronic session. Order books thin out immediately after the cash close. What looks like a tight 2-point stop on paper can easily become a <strong>5 or 6-point loss</strong> due to slippage when you try to exit. You don't get filled at your stop price — you get filled at whatever the market gives you.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="reason-meta">
+      <p class="reason-tag">Event risk</p>
+      <p class="reason-title">Earnings gaps</p>
+    </div>
+    <div class="reason-body">
+      <p class="reason-headline">Earnings hit between <em>4 and 5 PM</em></p>
+      <p class="reason-text">The most dangerous after-hours window for NQ is exactly 4:00–5:00 PM ET. This is when the heaviest Nasdaq-100 components — <strong>Apple, Microsoft, Meta, Nvidia, Amazon, Alphabet</strong> — release earnings. A single large-cap miss or beat can gap NQ 50 to 150 points in seconds.</p>
+      <div class="cascade">
+        <div class="cascade-item">
+          <span class="cascade-box">Earnings release at 4:05 PM</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-arrow">↓</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-box">NQ gaps 80 points against your position</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-arrow">↓</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-box">Stop fills at market — not your stop price</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-arrow">↓</span>
+        </div>
+        <div class="cascade-item">
+          <span class="cascade-box">Account breached. Evaluation failed.</span>
+        </div>
+      </div>
+      <p class="reason-text">There is <strong>no stop loss that protects you from a gap</strong>. Your order fills at whatever price the market opens after the move — not at the level you set.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="reason-meta">
+      <p class="reason-tag">Prop firm optics</p>
+      <p class="reason-title">Consistency scoring</p>
+    </div>
+    <div class="reason-body">
+      <p class="reason-headline">Firms flag <em>erratic</em> close behavior</p>
+      <p class="reason-text">Prop firms evaluate more than your P&L — they evaluate your <strong>behavioral consistency</strong>. A trader who books a solid $400 day and then surrenders $600 into the close is flagged as high-risk, even if the account is still net positive. Some firms use automated risk systems that trigger account reviews or position limits when intraday drawback patterns appear. Closing flat at 4 PM is not just good risk management — it is the profile of a trader firms <strong>want to keep funded</strong>.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <div class="reason-meta">
+      <p class="reason-tag">Psychology</p>
+      <p class="reason-title">Mental cost</p>
+    </div>
+    <div class="reason-body">
+      <p class="reason-headline">Holding into the close <em>costs more</em> than you think</p>
+      <p class="reason-text">Anxiety from an open position into a volatile close bleeds into your next session. Traders who hold into the close and get chopped tend to overtrade the following morning trying to recover. <strong>A clean flat exit at 4 PM gives you a defined result, a closed loop, and the mental separation</strong> needed to review your trades objectively and come back fresh the next day.</p>
+    </div>
+  </div>
+
+  <div class="exception">
+    <p class="exception-tag">The one nuanced exception</p>
+    <p class="exception-title">Already in a protected trail</p>
+    <p class="exception-text">If you entered a position before 3:45 PM and your stop is already at <strong>breakeven or better</strong> with a trailing stop doing the work — some experienced traders let the trail run rather than manually exiting. The key distinction: <strong>the stop is managing the trade, not you</strong>. You are not holding and hoping. Even then, most prop firm coaches recommend closing before 3:50 PM to avoid the final rebalancing window entirely. When in doubt, close it out.</p>
+  </div>
+
+  <div class="dnt-bar">
+    <span class="dnt-label">NQ / MNQ · Prop Firm Rule</span>
+    <span class="dnt-window">4:00 PM ET — Close all positions</span>
+  </div>
+
+  <div class="verdict">
+    <p class="verdict-tag">Bottom line</p>
+    <p class="verdict-text">The close is not a<br>trade. It is a <em>risk event.</em></p>
+    <p class="verdict-body">Your edge as a prop firm trader comes from <strong>defined setups with clear invalidation levels</strong>. None of those conditions exist at 4 PM. The downside of a close-driven breach on a prop account — where one bad candle ends your evaluation — far outweighs any potential upside from holding. Close the position. Log the day. Come back tomorrow.</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <span class="footer-brand">PROP BRUH</span>
+  <span class="footer-note">Not financial advice · For educational use only</span>
+</footer>
+
+</body>
+</html>
