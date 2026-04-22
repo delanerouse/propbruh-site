@@ -302,8 +302,9 @@ body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif
 // =============================================================================
 // CONFIG — change ADMIN_PASSWORD to whatever you want
 // =============================================================================
+const WORKER_URL = 'https://pbkb-api.delane-a36.workers.dev';
 const ADMIN_PASSWORD = 'propbruh2024';
-const STORAGE_KEY    = 'pb_kb_entries_v1';
+const STORAGE_KEY = 'pb_kb_entries_v1'; // kept for migration only
 
 // =============================================================================
 // BUILT-IN ENTRIES
@@ -425,13 +426,28 @@ const CAT_META = {
 // =============================================================================
 // STORAGE
 // =============================================================================
-function loadCustom() {
-  try { customEntries = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-  catch(e) { customEntries = []; }
+async function loadCustom() {
+  try {
+    const res = await fetch(`${WORKER_URL}/api/entries`);
+    customEntries = await res.json();
+  } catch(e) {
+    customEntries = [];
+  }
 }
 
-function saveCustom() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(customEntries));
+async function saveCustom() {
+  try {
+    await fetch(`${WORKER_URL}/api/entries`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ADMIN_PASSWORD}`
+      },
+      body: JSON.stringify(customEntries)
+    });
+  } catch(e) {
+    console.error('Save failed', e);
+  }
 }
 
 // =============================================================================
@@ -625,7 +641,7 @@ function updatePreview() {
   document.getElementById('previewA').innerHTML = a ? textToHtml(a) : '<em style="color:var(--text3)">No answer yet</em>';
 }
 
-function saveEntry() {
+async function saveEntry() {
   const q   = document.getElementById('newQ').value.trim();
   const raw = document.getElementById('newA').value.trim();
   const cat = document.getElementById('newCat').value;
@@ -646,7 +662,7 @@ function saveEntry() {
   }
 
   const targetId = editingId || customEntries[customEntries.length - 1].id;
-  saveCustom();
+  await saveCustom();
   closeOverlay('addOverlay');
   editingId = null;
   updateCounts();
@@ -658,10 +674,10 @@ function saveEntry() {
   }, 150);
 }
 
-function deleteEntry(id) {
+async function deleteEntry(id) {
   if (!confirm('Delete this entry?')) return;
   customEntries = customEntries.filter(e => e.id !== id);
-  saveCustom();
+  await saveCustom();
   updateCounts();
   render();
 }
@@ -764,13 +780,28 @@ function getAllCats() {
   return [...BUILTIN_CATS, ...uniqueCustom];
 }
 
-function loadCustomCats() {
-  try { customCats = JSON.parse(localStorage.getItem(CATS_KEY)) || []; }
-  catch(e) { customCats = []; }
+async function loadCustomCats() {
+  try {
+    const res = await fetch(`${WORKER_URL}/api/cats`);
+    customCats = await res.json();
+  } catch(e) {
+    customCats = [];
+  }
 }
 
-function saveCustomCats() {
-  localStorage.setItem(CATS_KEY, JSON.stringify(customCats));
+async function saveCustomCats() {
+  try {
+    await fetch(`${WORKER_URL}/api/cats`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ADMIN_PASSWORD}`
+      },
+      body: JSON.stringify(customCats)
+    });
+  } catch(e) {
+    console.error('Save cats failed', e);
+  }
 }
 
 function renderSidebar() {
@@ -838,7 +869,7 @@ function openCatManager() {
   setTimeout(() => document.getElementById('newCatName').focus(), 100);
 }
 
-function addCategory() {
+async function addCategory() {
   const name = document.getElementById('newCatName').value.trim();
   if (!name) { document.getElementById('newCatName').focus(); return; }
   const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
@@ -849,7 +880,7 @@ function addCategory() {
     return;
   }
   customCats.push({ id, label: name, color: selectedCatColor });
-  saveCustomCats();
+  await saveCustomCats();
   renderCatList();
   renderSidebar();
   renderCatDropdown();
@@ -857,7 +888,7 @@ function addCategory() {
   document.getElementById('newCatName').value = '';
 }
 
-function deleteCategory(id) {
+async function deleteCategory(id) {
   const hasEntries = customEntries.some(e => e.cat === id);
   if (hasEntries) {
     alert('This category has entries. Reassign or delete those entries before removing the category.');
@@ -865,7 +896,7 @@ function deleteCategory(id) {
   }
   if (!confirm('Delete this category?')) return;
   customCats = customCats.filter(c => c.id !== id);
-  saveCustomCats();
+  await saveCustomCats();
   renderCatList();
   renderSidebar();
   renderCatDropdown();
@@ -876,9 +907,9 @@ function deleteCategory(id) {
 // =============================================================================
 // INIT
 // =============================================================================
-function init() {
-  loadCustom();
-  loadCustomCats();
+async function init() {
+  await loadCustom();
+  await loadCustomCats();
   renderSidebar();
   renderCatDropdown('orb');
   updateCounts();
