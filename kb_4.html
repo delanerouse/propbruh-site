@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prop Bruh · Knowledge Base</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#0b090f; --bg2:#120f18; --bg3:#1a1622; --bg4:#221d2d;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#ede9f4; --text2:#7e7a8e; --text3:#47424f;
+  --gold:#CFB53B; --gold-light:#E8CE5A; --gold-dim:rgba(207,181,59,0.12); --gold-dim2:rgba(207,181,59,0.07);
+  --purple:#7B2FBE; --purple-light:#9B4FDE; --purple-dim:rgba(123,47,190,0.15); --purple-dim2:rgba(123,47,190,0.08);
+  --red:#e05555; --red-dim:rgba(224,85,85,0.09);
+  --green:#4ac98a; --green-dim:rgba(74,201,138,0.09);
+}
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.7; min-height:100vh; }
+
+/* NAV */
+.nav { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 2rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(11,9,15,0.96); backdrop-filter:blur(14px); z-index:100; }
+.nav-brand { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.1em; text-decoration:none; display:flex; flex-direction:column; line-height:1; }
+.nav-brand-text { color:var(--gold); }
+.nav-brand-line { height:2px; background:linear-gradient(90deg,var(--gold) 0%,var(--purple-light) 100%); border-radius:1px; margin-top:3px; }
+.nav-right { display:flex; align-items:center; gap:10px; }
+.nav-tag { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; border:1px solid var(--border2); padding:3px 10px; border-radius:3px; }
+.nav-tag.active { color:var(--gold); border-color:rgba(207,181,59,0.35); }
+.admin-btn { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; background:none; border:1px solid var(--border); padding:5px 12px; border-radius:3px; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; }
+.admin-btn:hover { color:var(--gold); border-color:rgba(207,181,59,0.35); }
+.admin-btn svg { width:12px; height:12px; }
+
+/* HERO */
+.hero { max-width:900px; margin:0 auto; padding:4.5rem 2rem 3rem; }
+.hero-kicker { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:1.25rem; }
+.hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(48px,7vw,80px); line-height:0.95; letter-spacing:0.01em; color:var(--text); margin-bottom:1.25rem; }
+.hero h1 em { font-style:normal; color:var(--gold); }
+.hero-sub { font-size:16px; color:var(--text2); font-weight:300; max-width:520px; line-height:1.65; margin-bottom:2.5rem; }
+
+/* SEARCH */
+.search-wrap { position:relative; max-width:540px; margin-bottom:0.75rem; }
+.search-wrap svg { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text3); pointer-events:none; }
+#search { width:100%; background:var(--bg3); border:1px solid var(--border2); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; padding:12px 16px 12px 42px; outline:none; transition:border-color 0.2s; }
+#search:focus { border-color:var(--gold); }
+#search::placeholder { color:var(--text3); }
+.search-hint { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.06em; margin-top:6px; }
+
+/* LAYOUT */
+.kb-layout { max-width:900px; margin:0 auto; padding:0 2rem 6rem; display:grid; grid-template-columns:190px 1fr; gap:3rem; align-items:start; }
+
+/* SIDEBAR */
+.sidebar { position:sticky; top:72px; }
+.sidebar-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.75rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+.cat-btn { display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer; padding:7px 10px; border-radius:4px; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text2); margin-bottom:2px; transition:background 0.15s,color 0.15s; }
+.cat-btn:hover { background:var(--bg3); color:var(--text); }
+.cat-btn.active { background:var(--purple-dim); color:var(--purple-light); }
+.cat-btn .cat-count { float:right; font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); margin-top:2px; }
+.cat-btn.active .cat-count { color:var(--purple-light); opacity:0.6; }
+.sidebar-divider { border:none; border-top:1px solid var(--border); margin:1.25rem 0; }
+.deep-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.75rem; }
+.deep-link { display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:4px; text-decoration:none; font-size:12px; color:var(--text2); margin-bottom:3px; transition:background 0.15s,color 0.15s; border:1px solid transparent; }
+.deep-link:hover { background:var(--gold-dim2); color:var(--gold); border-color:rgba(207,181,59,0.2); }
+.deep-link .arrow { color:var(--text3); font-size:10px; margin-left:auto; }
+
+/* STATS */
+.stats-row { display:flex; gap:10px; margin-bottom:2rem; flex-wrap:wrap; }
+.stat-pill { font-family:'DM Mono',monospace; font-size:11px; color:var(--text2); background:var(--bg3); border:1px solid var(--border2); padding:4px 12px; border-radius:20px; }
+.stat-pill span { color:var(--gold); }
+
+/* SECTION HEADER */
+.section-header { display:flex; align-items:baseline; gap:10px; margin-bottom:1rem; padding-bottom:0.5rem; border-bottom:1px solid var(--border); }
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.04em; color:var(--text2); }
+.section-count { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); }
+
+/* Q&A CARDS */
+.qa-card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; margin-bottom:8px; overflow:hidden; transition:border-color 0.2s; position:relative; }
+.qa-card:hover { border-color:var(--border2); }
+.qa-card.open { border-color:rgba(207,181,59,0.35); }
+.qa-card.custom-entry { border-left:2px solid var(--purple); }
+.qa-question { display:flex; align-items:center; gap:12px; padding:1rem 1.25rem; cursor:pointer; user-select:none; -webkit-user-select:none; }
+.qa-q-icon { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--gold); opacity:0.4; flex-shrink:0; width:18px; }
+.qa-card.open .qa-q-icon { opacity:1; }
+.qa-q-text { flex:1; font-size:14px; font-weight:500; color:var(--text); line-height:1.45; }
+.qa-chevron { color:var(--text3); flex-shrink:0; transition:transform 0.2s; font-size:11px; }
+.qa-card.open .qa-chevron { transform:rotate(180deg); color:var(--gold); }
+.qa-cat-badge { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.07em; text-transform:uppercase; padding:2px 7px; border-radius:3px; flex-shrink:0; white-space:nowrap; }
+.qa-answer { display:none; padding:0 1.25rem 1.25rem; border-top:1px solid var(--border); }
+.qa-card.open .qa-answer { display:block; }
+.qa-answer-inner { padding-top:1rem; font-size:14px; color:var(--text2); font-weight:300; line-height:1.85; }
+.qa-answer-inner p { margin-bottom:0.8rem; }
+.qa-answer-inner p:last-child { margin-bottom:0; }
+.qa-answer-inner strong { color:var(--text); font-weight:500; }
+.qa-answer-inner em { color:var(--gold); font-style:normal; }
+.qa-answer-inner a { color:var(--purple-light); text-decoration:none; }
+.qa-answer-footer { display:flex; align-items:center; justify-content:space-between; margin-top:1rem; padding-top:0.75rem; border-top:1px solid var(--border); }
+.qa-copy-link { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; background:none; border:none; padding:4px 8px; border-radius:3px; transition:color 0.15s,background 0.15s; }
+.qa-copy-link:hover { color:var(--gold); background:var(--gold-dim2); }
+.qa-copy-link.copied { color:var(--green); }
+.qa-delete-btn { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; background:none; border:none; padding:4px 8px; border-radius:3px; transition:color 0.15s,background 0.15s; display:none; }
+.admin-mode .qa-delete-btn { display:block; }
+.qa-delete-btn:hover { color:var(--red); background:var(--red-dim); }
+.qa-edit-btn { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; background:none; border:none; padding:4px 8px; border-radius:3px; transition:color 0.15s,background 0.15s; display:none; }
+.admin-mode .qa-edit-btn { display:block; }
+.qa-edit-btn:hover { color:var(--purple-light); background:var(--purple-dim2); }
+
+.no-results { text-align:center; padding:4rem 2rem; display:none; }
+.no-results-title { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--text3); margin-bottom:0.5rem; letter-spacing:0.04em; }
+.no-results-sub { font-size:13px; color:var(--text3); font-weight:300; }
+.cat-group { margin-bottom:2.5rem; }
+
+/* FOOTER */
+.footer { border-top:1px solid var(--border); padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; }
+.footer-brand { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.1em; }
+.footer-brand .g { color:var(--gold); }
+.footer-brand .p { color:var(--purple-light); }
+.footer-note { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.06em; }
+
+/* ── ADMIN OVERLAY ── */
+.overlay { display:none; position:fixed; inset:0; background:rgba(11,9,15,0.85); z-index:200; backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1.5rem; }
+.overlay.show { display:flex; }
+.modal { background:var(--bg3); border:1px solid var(--border2); border-radius:12px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.04em; color:var(--gold); }
+.modal-close { background:none; border:none; color:var(--text3); cursor:pointer; font-size:20px; line-height:1; padding:4px; transition:color 0.15s; }
+.modal-close:hover { color:var(--text); }
+.modal-body { padding:1.5rem; }
+.field { margin-bottom:1.25rem; }
+.field label { display:block; font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px; }
+.field input, .field select, .field textarea { width:100%; background:var(--bg2); border:1px solid var(--border2); border-radius:6px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; padding:10px 14px; outline:none; transition:border-color 0.2s; resize:vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color:var(--gold); }
+.field select option { background:var(--bg3); }
+.field textarea { min-height:120px; line-height:1.6; }
+.field-hint { font-size:12px; color:var(--text3); margin-top:6px; font-weight:300; }
+.modal-actions { display:flex; gap:10px; padding:0 1.5rem 1.5rem; }
+.btn-primary { flex:1; background:var(--gold); color:#0b090f; border:none; border-radius:6px; font-family:'DM Mono',monospace; font-size:12px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; padding:12px; cursor:pointer; transition:background 0.15s; }
+.btn-primary:hover { background:var(--gold-light); }
+.btn-secondary { background:none; color:var(--text2); border:1px solid var(--border2); border-radius:6px; font-family:'DM Mono',monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; padding:12px 20px; cursor:pointer; transition:all 0.15s; }
+.btn-secondary:hover { border-color:var(--border); color:var(--text); }
+
+/* PASSWORD SCREEN */
+.pw-screen { padding:2rem 1.5rem; text-align:center; }
+.pw-icon { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--gold); margin-bottom:0.5rem; letter-spacing:0.05em; }
+.pw-label { font-size:14px; color:var(--text2); margin-bottom:1.5rem; font-weight:300; }
+.pw-input-wrap { display:flex; gap:8px; max-width:320px; margin:0 auto 1rem; }
+.pw-input-wrap input { flex:1; background:var(--bg2); border:1px solid var(--border2); border-radius:6px; color:var(--text); font-family:'DM Mono',monospace; font-size:14px; padding:10px 14px; outline:none; transition:border-color 0.2s; }
+.pw-input-wrap input:focus { border-color:var(--gold); }
+.pw-submit { background:var(--gold); color:#0b090f; border:none; border-radius:6px; font-family:'DM Mono',monospace; font-size:12px; font-weight:500; padding:10px 18px; cursor:pointer; white-space:nowrap; }
+.pw-error { font-family:'DM Mono',monospace; font-size:11px; color:var(--red); letter-spacing:0.06em; min-height:16px; margin-top:4px; }
+
+/* ADMIN BAR */
+.admin-bar { display:none; background:var(--purple-dim2); border-bottom:1px solid rgba(123,47,190,0.2); padding:0.6rem 2rem; }
+.admin-bar.show { display:flex; align-items:center; justify-content:space-between; }
+.admin-bar-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--purple-light); letter-spacing:0.1em; text-transform:uppercase; }
+.admin-bar-actions { display:flex; gap:8px; }
+.admin-add-btn { font-family:'DM Mono',monospace; font-size:10px; color:#0b090f; background:var(--gold); border:none; border-radius:3px; padding:5px 14px; cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; transition:background 0.15s; }
+.admin-add-btn:hover { background:var(--gold-light); }
+.admin-logout-btn { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); background:none; border:1px solid var(--border); border-radius:3px; padding:5px 12px; cursor:pointer; letter-spacing:0.06em; text-transform:uppercase; transition:all 0.15s; }
+.admin-logout-btn:hover { color:var(--red); border-color:rgba(224,85,85,0.4); }
+
+/* PREVIEW */
+.preview-box { background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:1rem 1.25rem; margin-bottom:1.25rem; display:none; }
+.preview-box.show { display:block; }
+.preview-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.75rem; }
+.preview-q { font-size:14px; font-weight:500; color:var(--text); margin-bottom:0.5rem; }
+.preview-a { font-size:13px; color:var(--text2); font-weight:300; line-height:1.7; }
+
+@media (max-width:680px) {
+  .kb-layout { grid-template-columns:1fr; gap:1.5rem; }
+  .sidebar { position:static; }
+  .footer { flex-direction:column; gap:8px; text-align:center; }
+  .qa-cat-badge { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ADMIN BAR -->
+<div class="admin-bar" id="adminBar">
+  <span class="admin-bar-label">&#9679; Admin mode active</span>
+  <div class="admin-bar-actions">
+    <button class="admin-add-btn" onclick="openAddForm()">+ Add Entry</button>
+    <button class="admin-add-btn" style="background:var(--purple-light)" onclick="openCatManager()">&#9776; Categories</button>
+    <button class="admin-logout-btn" onclick="adminLogout()">Log out</button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a class="nav-brand" href="#">
+    <span class="nav-brand-text">PROP BRUH</span>
+    <span class="nav-brand-line"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tag active">Knowledge Base</span>
+    <span class="nav-tag" style="display:none" id="navMes">MES · NQ · Prop Firms</span>
+    <button class="admin-btn" onclick="openAdminLogin()" id="adminNavBtn" title="Admin">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Admin
+    </button>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-kicker">Community resource</p>
+  <h1>Got a<br><em>question?</em></h1>
+  <p class="hero-sub">Real answers to real questions from the Discord. Browse by category, search by keyword, or grab a direct link to send someone.</p>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search" placeholder="Search questions…" autocomplete="off" spellcheck="false" />
+  </div>
+  <p class="search-hint">Press / to focus &nbsp;·&nbsp; Esc to clear</p>
+</section>
+
+<div class="kb-layout">
+  <aside class="sidebar">
+    <p class="sidebar-label">Categories</p>
+    <div id="catSidebar">
+      <button class="cat-btn active" data-cat="all">All <span class="cat-count" id="count-all"></span></button>
+    </div>
+    <hr class="sidebar-divider" />
+    <p class="deep-label">Deep Dives</p>
+    <a class="deep-link" href="ny_lunch">NY Lunch &amp; Volume <span class="arrow">&#8599;</span></a>
+    <a class="deep-link" href="nq_4pm_close">Why Close at 4 PM <span class="arrow">&#8599;</span></a>
+  </aside>
+
+  <main id="kb-main">
+    <div class="stats-row">
+      <div class="stat-pill"><span id="visible-count">0</span> entries</div>
+      <div class="stat-pill">MES &middot; NQ &middot; MNQ</div>
+      <div class="stat-pill">Lucid &middot; Apex &middot; My Funded Futures</div>
+    </div>
+    <div id="kb-content"></div>
+    <div class="no-results" id="no-results">
+      <p class="no-results-title">No results found</p>
+      <p class="no-results-sub">Try a different search term or browse all categories.</p>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">
+  <span class="footer-brand"><span class="g">PROP</span> <span class="p">BRUH</span></span>
+  <span class="footer-note">Not financial advice &middot; For educational use only</span>
+</footer>
+
+<!-- PASSWORD OVERLAY -->
+<div class="overlay" id="pwOverlay">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <span class="modal-title">Admin Access</span>
+      <button class="modal-close" onclick="closeOverlay('pwOverlay')">&times;</button>
+    </div>
+    <div class="pw-screen">
+      <div class="pw-icon">PB</div>
+      <p class="pw-label">Enter your admin password to manage entries.</p>
+      <div class="pw-input-wrap">
+        <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()" />
+        <button class="pw-submit" onclick="checkPassword()">Enter</button>
+      </div>
+      <p class="pw-error" id="pwError"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ENTRY OVERLAY -->
+<div class="overlay" id="addOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="addModalTitle">Add New Entry</span>
+      <button class="modal-close" onclick="closeOverlay('addOverlay')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Category</label>
+        <select id="newCat" onchange="updatePreview()">
+        </select>
+      </div>
+      <div class="field">
+        <label>Question</label>
+        <input type="text" id="newQ" placeholder="e.g. What timeframe do you trade on?" oninput="updatePreview()" />
+      </div>
+      <div class="field">
+        <label>Answer</label>
+        <textarea id="newA" placeholder="Type your answer here. Keep it plain text — no HTML needed." oninput="updatePreview()"></textarea>
+        <p class="field-hint">Plain text only. Hit Enter for a new paragraph. Bold words by wrapping them in **double asterisks**.</p>
+      </div>
+      <div class="preview-box" id="previewBox">
+        <p class="preview-label">Preview</p>
+        <p class="preview-q" id="previewQ"></p>
+        <div class="preview-a" id="previewA"></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeOverlay('addOverlay')">Cancel</button>
+      <button class="btn-primary" id="saveBtn" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================================================
+// CONFIG — change ADMIN_PASSWORD to whatever you want
+// =============================================================================
+const ADMIN_PASSWORD = 'propbruh2024';
+const STORAGE_KEY    = 'pb_kb_entries_v1';
+
+// =============================================================================
+// BUILT-IN ENTRIES
+// =============================================================================
+const BUILTIN = [
+  {
+    cat:"prop-firms", catLabel:"Prop Firms",
+    catColor:"#CFB53B", catBg:"rgba(207,181,59,0.08)",
+    entries:[
+      { id:"trailing-vs-static-drawdown", q:"What is the difference between trailing drawdown and static drawdown?",
+        a:`<p><strong>Trailing drawdown</strong> moves up as your account equity increases. If you start with $50K and grow to $52K, your drawdown threshold rises with you — it tracks your highest equity point. Most Apex evaluation accounts use trailing drawdown.</p><p><strong>Static drawdown</strong> is fixed from day one. If your limit is $1,500 below starting balance, it stays there regardless of profits. Funded accounts at many firms use static. Static is generally safer to manage because it never moves against you after a good day.</p><p>Critical note with trailing: <em>unrealized losses count</em>. If you're up $800 intraday and a trade goes $400 against you, the open loss is measured against your highest equity — not your starting balance.</p>` },
+      { id:"apex-trailing-danger", q:"Why is Apex trailing drawdown dangerous on evaluation accounts?",
+        a:`<p>Because it follows your <strong>highest intraday equity</strong>, not your daily close. You start at $52,100. You reach $52,800 intraday. Your trailing floor has now moved up $700 from its original position.</p><p>If the market reverses and a trade goes $900 against you from that peak, you breach the trail — even though you were profitable when the session opened. This is why <em>you never let a winning trade become a large loser on an Apex eval</em>. Move stops to breakeven, trail aggressively, and close before 4 PM.</p>` },
+      { id:"how-many-accounts", q:"How many prop firm accounts should I run at once?",
+        a:`<p>As many as you can trade with full attention — never more. Running six accounts means six pre-session checks, six drawdown levels to monitor, and six rule sets to keep straight. Most traders do it better with fewer accounts managed well than many accounts managed carelessly.</p><p>A practical framework: <strong>one funded account you protect</strong>, plus one or two active evaluations. As payouts come in, add evaluations. The goal is a pipeline — evals converting to funded, funded generating payouts, repeat.</p>` },
+      { id:"payout-timing", q:"When can I request a payout from my funded account?",
+        a:`<p>Every firm has different requirements. Common conditions: minimum number of active trading days (often 5–10), minimum profit threshold reached, no active drawdown violations, and sometimes a consistency rule limiting how much one day can represent of total profits.</p><p><strong>Always verify in your specific account dashboard before requesting.</strong> Never assume rules are the same across Apex, Lucid, and My Funded Futures — they each have their own schedules and conditions.</p>` },
+      { id:"consistency-rule", q:"What is a consistency rule and how does it affect my trading?",
+        a:`<p>A consistency rule limits how much of your total account profit can come from a single day. Common version: no single day can represent more than 30% of total profits at payout time.</p><p>In practice: <strong>spread your profits across multiple days.</strong> Steady, repeatable days build a payout-eligible record much faster than one big day followed by flat weeks.</p>` },
+    ]
+  },
+  {
+    cat:"risk", catLabel:"Risk Management",
+    catColor:"#e05555", catBg:"rgba(224,85,85,0.08)",
+    entries:[
+      { id:"why-close-4pm", q:"Why should NQ prop firm traders close all positions at 4 PM ET?",
+        a:`<p>Three forces converge at the bell: institutional rebalancing order flow (non-directional, has nothing to do with your setup), peak earnings risk from large Nasdaq components (Apple, Nvidia, Meta, Microsoft — a single miss gaps NQ 50–150 points instantly), and active prop firm trailing drawdown that can be breached by one adverse candle at 3:58 PM.</p><p><strong>No stop loss protects you from a gap.</strong> Your fill is at market, not your stop price. See the <a href="nq_4pm_close">full deep dive</a> for the complete breakdown.</p>` },
+      { id:"2-loss-kill-switch", q:"What is the 2-consecutive-loss rule and why is it non-negotiable?",
+        a:`<p>If you take two losing trades back-to-back, you stop trading for that session. No override, no exceptions. Close the charts and walk away.</p><p>After one loss, the brain wants to recover immediately. After two, the urge to revenge trade is overwhelming — and revenge trading on a prop account is one of the fastest ways to breach a daily loss limit. <strong>The rule removes the decision entirely.</strong> Two losses is the circuit breaker.</p>` },
+      { id:"hard-stop-vs-mental", q:"Why is a mental stop not the same as a hard stop?",
+        a:`<p>A mental stop requires manual execution the moment price hits your level. Under pressure, the brain hesitates. You tell yourself the trade needs one more candle. You nudge the level. By the time you act, you've given up 2–4 extra points beyond your plan.</p><p>A hard stop executes automatically at the exact price you set. On MES that difference might be $10–20. On NQ it could be $100+ per contract. <strong>Set the hard stop before you enter. Every time.</strong></p>` },
+      { id:"move-stop-to-be", q:"When should I move my stop to breakeven?",
+        a:`<p>Once your trade reaches <strong>1R in profit</strong> — unrealized gain equals initial risk — move the stop to your entry price. Worst case from that point is a breakeven result. Capital is preserved.</p><p>From breakeven, trail using 1-minute candle structure. For longs, trail below each successive higher candle low as price advances. A trade stopped at breakeven is a good outcome — you followed the plan and lost nothing.</p>` },
+      { id:"daily-loss-limit-math", q:"How do I calculate how many contracts I can trade given my daily loss limit?",
+        a:`<p><strong>Max contracts = Daily loss limit ÷ (Stop size in points × Point value)</strong></p><p>MES example — $250 daily limit, 4-point stop: $250 ÷ (4 × $5.00) = 12.5 max contracts per trade. But most disciplined traders risk 20–25% of daily limit per trade: $50 ÷ $20 per contract = <em>2–3 contracts</em>.</p>` },
+    ]
+  },
+  {
+    cat:"orb", catLabel:"ORB Strategy",
+    catColor:"#9B4FDE", catBg:"rgba(123,47,190,0.1)",
+    entries:[
+      { id:"what-is-orb", q:"What is an Opening Range Breakout and how does it work?",
+        a:`<p>An ORB defines a price range using the opening candle(s) after a session opens. The high and low of that candle become your boundaries. When price breaks and <em>closes</em> outside that range on the 1-minute chart — above the high for a long, below the low for a short — that's your entry signal.</p><p>The logic: <strong>the opening range captures initial market indecision.</strong> Once participants commit and price breaks with conviction, momentum tends to follow. A breakout moving into clear space is valid. One running into a nearby S/R level within 2–3 points is not.</p>` },
+      { id:"orb-timeframe-why", q:"Why use a 15-minute ORB at 9:30 AM but 5-minute at all other sessions?",
+        a:`<p>The 9:30 AM RTH open is the highest-volume, most volatile session. The first 5 minutes are often pure noise — institutional orders hitting, gaps filling, stops getting run. A <strong>15-minute candle filters that initial chaos</strong> and gives you a range that reflects where the market actually wants to go.</p><p>Other sessions open into comparatively lower volume. Five minutes is sufficient. Using 15 minutes at evening sessions would create ranges too wide for a reasonable reward-to-risk ratio.</p>` },
+      { id:"timeframe-i-trade", q:"What timeframe do you trade on?",
+        a:`<p>The ORB candle timeframe depends on the session. For the <strong>9:30 AM RTH open</strong>, I use a 15-minute ORB candle — that gives the market time to shake out the opening noise before I mark my range. For all other sessions (7 AM, 8 AM, 6 PM, 7 PM, 8 PM), I use a <strong>5-minute ORB candle</strong>.</p><p>Entries and exits are always executed on the <em>1-minute chart</em> regardless of which session I'm trading. The ORB candle defines the range — the 1-minute chart is where I wait for the breakout confirmation and manage the trade.</p>` },
+      { id:"wick-vs-candle-close", q:"Can I enter when price wicks through the ORB level without a candle close?",
+        a:`<p>No. Always wait for a <strong>1-minute candle body close</strong> beyond the ORB level. A wick through a level without a close means the market tested that price and rejected it — the opposite of breakout confirmation.</p><p>The rule: 1-min candle closes above ORB High = long. Closes below ORB Low = short. Wick only = wait for the next candle. No exceptions.</p>` },
+      { id:"sr-confluence-orb", q:"How do I use support and resistance to confirm an ORB entry?",
+        a:`<p>Before the session opens, mark your key levels: prior day high and low, overnight consolidation zones, obvious round numbers. When the breakout fires, ask one question: <strong>is price moving into clear space or directly into a wall?</strong></p><p>If resistance sits 2–3 points above your long entry, price will likely stall. Skip it or reduce size. If the breakout pushes into 10+ points of clear space, that's the setup.</p>` },
+      { id:"false-breakout", q:"How do I identify a false breakout vs a real one?",
+        a:`<p>Common tells: unusually large breakout candle (more than 2x average range) that exhausts momentum immediately; breakout directly into a major S/R level within 2–3 points; price closes back inside the range within 1–2 candles.</p><p>If you enter and the trade immediately reverses back through the ORB level, that's your stop. Take it. A failed ORB you exit cleanly is a managed loss. One you hold hoping for recovery costs multiples more.</p>` },
+    ]
+  },
+  {
+    cat:"sizing", catLabel:"Sizing & Math",
+    catColor:"#4ac98a", catBg:"rgba(74,201,138,0.07)",
+    entries:[
+      { id:"mes-contract-specs", q:"What are the MES contract specs vs ES?",
+        a:`<p>MES (Micro E-mini S&P 500) is exactly 1/10 the size of ES. <strong>Tick size: 0.25 pts. Tick value: $1.25/contract. Point value: $5.00/contract. 4 ticks = 1 point.</strong></p><p>ES: tick value $12.50, point value $50.00. Trading 10 MES is mathematically equivalent to 1 ES contract.</p>` },
+      { id:"mnq-contract-specs", q:"What are the MNQ contract specs vs NQ?",
+        a:`<p>MNQ (Micro E-mini Nasdaq-100) is 1/10 the size of NQ. <strong>Tick size: 0.25 pts. Tick value: $0.50/contract. Point value: $2.00/contract. 4 ticks = 1 point.</strong></p><p>NQ: tick value $5.00, point value $20.00. Use 8–15 point stops on MNQ depending on session volatility — NQ moves far more points than ES for equivalent dollar moves.</p>` },
+      { id:"risk-calculation", q:"How do I calculate my dollar risk before entering a trade?",
+        a:`<p><strong>Risk ($) = Stop distance (points) × Point value × Contracts</strong></p><p>MES: 4-pt stop, 3 contracts = 4 × $5 × 3 = <em>$60</em>. NQ: 10-pt stop, 1 contract = 10 × $20 = <em>$200</em>. Always calculate before entering.</p>` },
+      { id:"breakeven-win-rate", q:"What win rate do I need to be profitable at 2:1 R:R?",
+        a:`<p>At 2:1 R:R, break-even win rate is <strong>33.3%</strong>. You can lose 2 out of every 3 trades and still not lose money. Formula: Break-even % = 1 ÷ (1 + R:R).</p><p>A trader winning 40% at 2:1 is more profitable than one winning 60% at 0.8:1. <strong>Focus on the ratio, not just the win count.</strong></p>` },
+      { id:"1r-r-multiples", q:"What does 1R, 2R, and 3R mean?",
+        a:`<p>R is your initial risk amount. If you risk $50: <strong>1R = $50 profit, 2R = $100, 3R = $150.</strong> R multiples let you measure performance consistently regardless of position size.</p><p>Track your average R per trade weekly — it's a better performance metric than total P&L alone.</p>` },
+    ]
+  },
+  {
+    cat:"psychology", catLabel:"Psychology",
+    catColor:"#9B4FDE", catBg:"rgba(123,47,190,0.08)",
+    entries:[
+      { id:"revenge-trading", q:"What is revenge trading and how do I stop doing it?",
+        a:`<p>Revenge trading is entering a position to recover a recent loss rather than because a valid setup exists. The trigger is the loss — not the chart.</p><p><strong>The fix is mechanical, not motivational.</strong> After any loss: close the chart for 15 minutes before you're allowed to consider another trade. The 2-loss kill switch handles the worst case — the pause handles the emotional state before it escalates.</p>` },
+      { id:"fomo-chasing", q:"I keep chasing entries after I miss the ORB breakout. How do I handle FOMO?",
+        a:`<p>Chasing price 5–10 points after a missed breakout is not the same trade. Worse math, worse setup, same emotional cost if it stops you out.</p><p>A missed trade costs you nothing. A chased trade can cost you real money and real drawdown. If price is already 3+ points past the breakout when you're about to click — close the order ticket.</p>` },
+      { id:"losing-streak", q:"What should I do after a bad losing streak?",
+        a:`<p>Step away for at least one full trading day and do a structured review of every losing trade. For each: was it a valid setup per your rules? If yes, variance is normal. If no, what rule did you break?</p><p>Most losing streaks are either normal drawdown variance or rule-bending — marginal setups, moved stops, oversizing to recover. <strong>Honest self-diagnosis matters more than motivation.</strong></p>` },
+      { id:"trading-scared", q:"I keep exiting trades early because I'm afraid of giving back profits. How do I fix this?",
+        a:`<p>Early exits are fear of loss masquerading as discipline. Over time, chronic early exits destroy your R:R.</p><p><strong>Define your exit criteria before you enter, then commit to letting the plan execute.</strong> Treat manual early exits as rule violations in your post-session review. If you're staring at the P&L number instead of the chart, minimize the P&L window.</p>` },
+    ]
+  },
+  {
+    cat:"sessions", catLabel:"Sessions & Hours",
+    catColor:"#CFB53B", catBg:"rgba(207,181,59,0.07)",
+    entries:[
+      { id:"ny-lunch-avoid", q:"Why is NY lunch (12–1 PM ET) one of the worst times to trade?",
+        a:`<p>Three forces converge at noon: New York institutional desks go to lunch, London closes its session, and market makers reduce activity. The result is low volume, choppy price action, and false breakouts in both directions.</p><p>See the <a href="ny_lunch">NY Lunch deep dive</a> for the full breakdown.</p>` },
+      { id:"evening-session-risks", q:"What are the specific risks of trading the 6, 7, and 8 PM ORB sessions?",
+        a:`<p>Volume drops significantly after the 4 PM RTH close. Lower volume means wider spreads, more stop hunts, and less reliable follow-through. A move that carries 8 points in the morning may carry 3 points at 7 PM.</p><p><strong>Smaller size, tighter targets, never hold positions overnight.</strong></p>` },
+      { id:"8am-economic-data", q:"Is the 8 AM ORB worth trading when economic data releases at 8:30 AM?",
+        a:`<p>Be careful. If a high-impact release is at 8:30 AM (CPI, PPI, NFP, Fed), the 8 AM ORB breakout may be driven by pre-data positioning and can completely reverse when the number hits.</p><p>Check the economic calendar before every 8 AM session. If there's a high-impact release at 8:30, either skip or be prepared to exit well before the number regardless of where your trail is.</p>` },
+      { id:"best-session-orb", q:"Which ORB session tends to give the cleanest setups?",
+        a:`<p>The <strong>9:30 AM RTH open</strong> is consistently the highest quality ORB session. Volume is at its peak, institutional participation is highest, and the 15-minute range filters early noise.</p><p>Among pre-market sessions, <strong>8 AM</strong> (no data risk) is the next most reliable. Evening sessions are secondary — reduced size only.</p>` },
+    ]
+  },
+];
+
+// =============================================================================
+// STATE
+// =============================================================================
+let activeCat   = 'all';
+let searchQ     = '';
+let isAdmin     = false;
+let customEntries = [];
+let editingId   = null;
+
+const CAT_META = {
+  'prop-firms': { label:'Prop Firms',       color:'#CFB53B', bg:'rgba(207,181,59,0.08)' },
+  'risk':        { label:'Risk Management',  color:'#e05555', bg:'rgba(224,85,85,0.08)' },
+  'orb':         { label:'ORB Strategy',     color:'#9B4FDE', bg:'rgba(123,47,190,0.1)' },
+  'sizing':      { label:'Sizing & Math',    color:'#4ac98a', bg:'rgba(74,201,138,0.07)' },
+  'psychology':  { label:'Psychology',       color:'#9B4FDE', bg:'rgba(123,47,190,0.08)' },
+  'sessions':    { label:'Sessions & Hours', color:'#CFB53B', bg:'rgba(207,181,59,0.07)' },
+};
+// =============================================================================
+// STORAGE
+// =============================================================================
+function loadCustom() {
+  try { customEntries = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch(e) { customEntries = []; }
+}
+
+function saveCustom() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(customEntries));
+}
+
+// =============================================================================
+// MERGE built-in + custom into section structure
+// =============================================================================
+function getMergedSections() {
+  const sections = BUILTIN.map(s => ({
+    ...s,
+    entries: [...s.entries]
+  }));
+
+  customEntries.forEach(ce => {
+    let section = sections.find(s => s.cat === ce.cat);
+    if (!section) {
+      const allCats = typeof getAllCats === 'function' ? getAllCats() : [];
+      const found = allCats.find(c => c.id === ce.cat);
+      const color = found ? found.color : '#CFB53B';
+      const r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
+      section = {
+        cat: ce.cat,
+        catLabel: found ? found.label : ce.cat,
+        catColor: color,
+        catBg: `rgba(${r},${g},${b},0.08)`,
+        entries: []
+      };
+      sections.push(section);
+    }
+    section.entries.push({ id: ce.id, q: ce.q, a: ce.a, custom: true });
+  });
+
+  return sections;
+}
+
+// =============================================================================
+// COUNTS
+// =============================================================================
+function updateCounts() {
+  const sections = getMergedSections();
+  const total = sections.reduce((a, s) => a + s.entries.length, 0);
+  const el = document.getElementById('count-all');
+  if (el) el.textContent = total;
+
+  getAllCats().forEach(cat => {
+    const sec = sections.find(s => s.cat === cat.id);
+    const countEl = document.getElementById(`count-${cat.id}`);
+    if (countEl) countEl.textContent = sec ? sec.entries.length : 0;
+  });
+
+  document.getElementById('visible-count').textContent = total;
+}
+
+// =============================================================================
+// RENDER
+// =============================================================================
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g,'');
+}
+
+function textToHtml(text) {
+  return text.trim().split(/\n\s*\n/).map(para => {
+    let p = para.trim().replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return `<p>${p}</p>`;
+  }).join('');
+}
+
+function matches(entry, q) {
+  if (!q) return true;
+  const lq = q.toLowerCase();
+  return entry.q.toLowerCase().includes(lq) || entry.a.toLowerCase().includes(lq);
+}
+
+function buildCard(entry, section) {
+  const card = document.createElement('div');
+  card.className = 'qa-card' + (entry.custom ? ' custom-entry' : '');
+  card.id = entry.id;
+  const badge = `background:${section.catBg};color:${section.catColor};border:1px solid ${section.catColor}33`;
+  card.innerHTML = `
+    <div class="qa-question" onclick="this.closest('.qa-card').classList.toggle('open')">
+      <span class="qa-q-icon">Q</span>
+      <span class="qa-q-text">${entry.q}</span>
+      <span class="qa-cat-badge" style="${badge}">${section.catLabel}</span>
+      <span class="qa-chevron">&#9660;</span>
+    </div>
+    <div class="qa-answer">
+      <div class="qa-answer-inner">${entry.a}</div>
+      <div class="qa-answer-footer">
+        <button class="qa-copy-link" onclick="copyLink('${entry.id}',this)">copy link</button>
+        ${entry.custom ? `<button class="qa-edit-btn" onclick="editEntry('${entry.id}')">edit</button>` : ''}
+        ${entry.custom ? `<button class="qa-delete-btn" onclick="deleteEntry('${entry.id}')">delete</button>` : ''}
+      </div>
+    </div>`;
+  return card;
+}
+
+function render() {
+  const sections  = getMergedSections();
+  const container = document.getElementById('kb-content');
+  const noResults = document.getElementById('no-results');
+  container.innerHTML = '';
+  let total = 0;
+
+  sections.forEach(section => {
+    if (activeCat !== 'all' && activeCat !== section.cat) return;
+    const filtered = section.entries.filter(e => matches(e, searchQ));
+    if (!filtered.length) return;
+    total += filtered.length;
+
+    const group = document.createElement('div');
+    group.className = 'cat-group';
+
+    if (activeCat === 'all' || searchQ) {
+      const hdr = document.createElement('div');
+      hdr.className = 'section-header';
+      hdr.innerHTML = `<span class="section-title">${section.catLabel}</span><span class="section-count">${filtered.length} entr${filtered.length===1?'y':'ies'}</span>`;
+      group.appendChild(hdr);
+    }
+
+    filtered.forEach(e => group.appendChild(buildCard(e, section)));
+    container.appendChild(group);
+  });
+
+  document.getElementById('visible-count').textContent = total;
+  noResults.style.display = total === 0 ? 'block' : 'none';
+
+  if (isAdmin) document.body.classList.add('admin-mode');
+  else document.body.classList.remove('admin-mode');
+
+  const hash = location.hash.slice(1);
+  if (hash) {
+    const el = document.getElementById(hash);
+    if (el) { el.classList.add('open'); setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'center' }), 150); }
+  }
+}
+
+// =============================================================================
+// ADMIN
+// =============================================================================
+function openAdminLogin() {
+  if (isAdmin) { openAddForm(); return; }
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+  document.getElementById('pwOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function checkPassword() {
+  const val = document.getElementById('pwInput').value;
+  if (val === ADMIN_PASSWORD) {
+    isAdmin = true;
+    closeOverlay('pwOverlay');
+    document.getElementById('adminBar').classList.add('show');
+    document.getElementById('adminNavBtn').style.color = 'var(--gold)';
+    render();
+  } else {
+    document.getElementById('pwError').textContent = 'Incorrect password.';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function adminLogout() {
+  isAdmin = false;
+  document.getElementById('adminBar').classList.remove('show');
+  document.getElementById('adminNavBtn').style.color = '';
+  render();
+}
+
+function openAddForm() {
+  editingId = null;
+  document.getElementById('addModalTitle').textContent = 'Add New Entry';
+  document.getElementById('saveBtn').textContent = 'Save Entry';
+  document.getElementById('newQ').value = '';
+  document.getElementById('newA').value = '';
+  renderCatDropdown('orb');
+  document.getElementById('previewBox').classList.remove('show');
+  document.getElementById('addOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('newQ').focus(), 100);
+}
+
+function closeOverlay(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+function updatePreview() {
+  const q = document.getElementById('newQ').value.trim();
+  const a = document.getElementById('newA').value.trim();
+  const box = document.getElementById('previewBox');
+  if (!q && !a) { box.classList.remove('show'); return; }
+  box.classList.add('show');
+  document.getElementById('previewQ').textContent = q || '(no question yet)';
+  document.getElementById('previewA').innerHTML = a ? textToHtml(a) : '<em style="color:var(--text3)">No answer yet</em>';
+}
+
+function saveEntry() {
+  const q   = document.getElementById('newQ').value.trim();
+  const raw = document.getElementById('newA').value.trim();
+  const cat = document.getElementById('newCat').value;
+
+  if (!q) { document.getElementById('newQ').focus(); return; }
+  if (!raw) { document.getElementById('newA').focus(); return; }
+
+  const a = textToHtml(raw);
+
+  if (editingId) {
+    const idx = customEntries.findIndex(e => e.id === editingId);
+    if (idx !== -1) {
+      customEntries[idx] = { ...customEntries[idx], cat, q, a };
+    }
+  } else {
+    const id = slugify(q).slice(0, 60) + '-' + Date.now().toString(36);
+    customEntries.push({ id, cat, q, a, custom: true });
+  }
+
+  const targetId = editingId || customEntries[customEntries.length - 1].id;
+  saveCustom();
+  closeOverlay('addOverlay');
+  editingId = null;
+  updateCounts();
+  render();
+
+  setTimeout(() => {
+    const el = document.getElementById(targetId);
+    if (el) { el.classList.add('open'); el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+  }, 150);
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  customEntries = customEntries.filter(e => e.id !== id);
+  saveCustom();
+  updateCounts();
+  render();
+}
+
+function editEntry(id) {
+  const entry = customEntries.find(e => e.id === id);
+  if (!entry) return;
+
+  editingId = id;
+  document.getElementById('addModalTitle').textContent = 'Edit Entry';
+  document.getElementById('saveBtn').textContent = 'Save Changes';
+  renderCatDropdown(entry.cat);
+  document.getElementById('newQ').value = entry.q;
+
+  // Convert stored HTML back to plain text for editing
+  const rawText = entry.a
+    .replace(/<\/p>\s*<p>/g, '\n\n')
+    .replace(/<\/?p>/g, '')
+    .replace(/<strong>(.*?)<\/strong>/g, '**$1**')
+    .replace(/<em>(.*?)<\/em>/g, '$1')
+    .replace(/<a[^>]*>(.*?)<\/a>/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+
+  document.getElementById('newA').value = rawText;
+  updatePreview();
+  document.getElementById('addOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('newQ').focus(), 100);
+}
+
+// =============================================================================
+// UTILS
+// =============================================================================
+function copyLink(id, btn) {
+  const url = `${location.origin}${location.pathname}#${id}`;
+  navigator.clipboard.writeText(url).then(() => {
+    btn.textContent = 'copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy link'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// Category filter
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    render();
+  });
+});
+
+// Search
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', e => { searchQ = e.target.value.trim(); render(); });
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== searchEl) { e.preventDefault(); searchEl.focus(); }
+  if (e.key === 'Escape') {
+    if (document.querySelector('.overlay.show')) {
+      document.querySelectorAll('.overlay.show').forEach(o => o.classList.remove('show'));
+    } else {
+      searchEl.blur(); searchQ = ''; searchEl.value = ''; render();
+    }
+  }
+});
+
+// Close overlay on backdrop click
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('show'); });
+});
+
+// =============================================================================
+// CATEGORY MANAGEMENT
+// =============================================================================
+const CATS_KEY = 'pb_kb_cats_v1';
+
+const BUILTIN_CATS = [
+  { id:'prop-firms', label:'Prop Firms',       color:'#CFB53B' },
+  { id:'risk',       label:'Risk Management',  color:'#e05555' },
+  { id:'orb',        label:'ORB Strategy',     color:'#9B4FDE' },
+  { id:'sizing',     label:'Sizing & Math',    color:'#4ac98a' },
+  { id:'psychology', label:'Psychology',        color:'#9B4FDE' },
+  { id:'sessions',   label:'Sessions & Hours', color:'#CFB53B' },
+];
+
+let customCats = [];
+let selectedCatColor = '#CFB53B';
+
+function colorToAlpha(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function getAllCats() {
+  const custom = customCats.map(c => ({ ...c, isCustom:true }));
+  const builtinIds = new Set(BUILTIN_CATS.map(c => c.id));
+  const uniqueCustom = custom.filter(c => !builtinIds.has(c.id));
+  return [...BUILTIN_CATS, ...uniqueCustom];
+}
+
+function loadCustomCats() {
+  try { customCats = JSON.parse(localStorage.getItem(CATS_KEY)) || []; }
+  catch(e) { customCats = []; }
+}
+
+function saveCustomCats() {
+  localStorage.setItem(CATS_KEY, JSON.stringify(customCats));
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById('catSidebar');
+  sidebar.innerHTML = '';
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cat-btn' + (activeCat === 'all' ? ' active' : '');
+  allBtn.dataset.cat = 'all';
+  allBtn.innerHTML = `All <span class="cat-count" id="count-all"></span>`;
+  allBtn.addEventListener('click', () => { activeCat = 'all'; renderSidebar(); render(); });
+  sidebar.appendChild(allBtn);
+
+  getAllCats().forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (activeCat === cat.id ? ' active' : '');
+    btn.dataset.cat = cat.id;
+    btn.innerHTML = `${cat.label} <span class="cat-count" id="count-${cat.id}"></span>`;
+    btn.addEventListener('click', () => { activeCat = cat.id; renderSidebar(); render(); });
+    sidebar.appendChild(btn);
+  });
+}
+
+function renderCatDropdown(selectedVal) {
+  const sel = document.getElementById('newCat');
+  sel.innerHTML = '';
+  getAllCats().forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat.id;
+    opt.textContent = cat.label;
+    if (cat.id === (selectedVal || 'orb')) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function renderCatList() {
+  const list = document.getElementById('catList');
+  list.innerHTML = '';
+  const all = getAllCats();
+  if (!all.length) { list.innerHTML = '<p style="font-size:13px;color:var(--text3);">No categories yet.</p>'; return; }
+  all.forEach(cat => {
+    const isBuiltin = BUILTIN_CATS.some(b => b.id === cat.id);
+    const item = document.createElement('div');
+    item.className = 'cat-list-item';
+    item.innerHTML = `
+      <span class="cat-list-dot" style="background:${cat.color}"></span>
+      <span class="cat-list-name">${cat.label}</span>
+      <span class="cat-list-badge">${isBuiltin ? 'built-in' : 'custom'}</span>
+      <button class="cat-list-delete ${isBuiltin ? 'locked' : ''}" onclick="${isBuiltin ? '' : `deleteCategory('${cat.id}')`}" title="${isBuiltin ? 'Built-in categories cannot be removed' : 'Delete category'}">${isBuiltin ? 'locked' : 'delete'}</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function selectColor(el, color) {
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  selectedCatColor = color;
+}
+
+function openCatManager() {
+  renderCatList();
+  document.getElementById('newCatName').value = '';
+  document.getElementById('catOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('newCatName').focus(), 100);
+}
+
+function addCategory() {
+  const name = document.getElementById('newCatName').value.trim();
+  if (!name) { document.getElementById('newCatName').focus(); return; }
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+  if (getAllCats().some(c => c.id === id)) {
+    document.getElementById('newCatName').value = '';
+    document.getElementById('newCatName').placeholder = 'That category already exists';
+    setTimeout(() => document.getElementById('newCatName').placeholder = 'e.g. Chart Patterns', 2000);
+    return;
+  }
+  customCats.push({ id, label: name, color: selectedCatColor });
+  saveCustomCats();
+  renderCatList();
+  renderSidebar();
+  renderCatDropdown();
+  updateCounts();
+  document.getElementById('newCatName').value = '';
+}
+
+function deleteCategory(id) {
+  const hasEntries = customEntries.some(e => e.cat === id);
+  if (hasEntries) {
+    alert('This category has entries. Reassign or delete those entries before removing the category.');
+    return;
+  }
+  if (!confirm('Delete this category?')) return;
+  customCats = customCats.filter(c => c.id !== id);
+  saveCustomCats();
+  renderCatList();
+  renderSidebar();
+  renderCatDropdown();
+  updateCounts();
+  if (activeCat === id) { activeCat = 'all'; render(); }
+}
+
+// =============================================================================
+// INIT
+// =============================================================================
+loadCustom();
+loadCustomCats();
+renderSidebar();
+renderCatDropdown('orb');
+updateCounts();
+render();
+</script>
+<!-- CATEGORY MANAGER OVERLAY -->
+<div class="overlay" id="catOverlay">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title">Manage Categories</span>
+      <button class="modal-close" onclick="closeOverlay('catOverlay')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="catList" style="margin-bottom:1.5rem;"></div>
+      <div style="border-top:1px solid var(--border);padding-top:1.25rem;">
+        <p style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;">Add New Category</p>
+        <div class="field">
+          <label>Category Name</label>
+          <input type="text" id="newCatName" placeholder="e.g. Chart Patterns" />
+        </div>
+        <div class="field">
+          <label>Color</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;" id="colorPicker">
+            <button class="color-swatch active" data-color="#CFB53B" style="background:#CFB53B" onclick="selectColor(this,'#CFB53B')"></button>
+            <button class="color-swatch" data-color="#9B4FDE" style="background:#9B4FDE" onclick="selectColor(this,'#9B4FDE')"></button>
+            <button class="color-swatch" data-color="#e05555" style="background:#e05555" onclick="selectColor(this,'#e05555')"></button>
+            <button class="color-swatch" data-color="#4ac98a" style="background:#4ac98a" onclick="selectColor(this,'#4ac98a')"></button>
+            <button class="color-swatch" data-color="#5b9cf6" style="background:#5b9cf6" onclick="selectColor(this,'#5b9cf6')"></button>
+            <button class="color-swatch" data-color="#f5a623" style="background:#f5a623" onclick="selectColor(this,'#f5a623')"></button>
+            <button class="color-swatch" data-color="#f06292" style="background:#f06292" onclick="selectColor(this,'#f06292')"></button>
+            <button class="color-swatch" data-color="#7e7a8e" style="background:#7e7a8e" onclick="selectColor(this,'#7e7a8e')"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeOverlay('catOverlay')">Done</button>
+      <button class="btn-primary" onclick="addCategory()">Add Category</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.color-swatch { width:28px;height:28px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:border-color 0.15s,transform 0.15s; }
+.color-swatch:hover { transform:scale(1.1); }
+.color-swatch.active { border-color:var(--text); transform:scale(1.1); }
+.cat-list-item { display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--bg2);border:1px solid var(--border);margin-bottom:6px; }
+.cat-list-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0; }
+.cat-list-name { flex:1;font-size:14px;color:var(--text); }
+.cat-list-badge { font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:0.06em; }
+.cat-list-delete { font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);background:none;border:none;cursor:pointer;padding:3px 8px;border-radius:3px;transition:color 0.15s,background 0.15s; }
+.cat-list-delete:hover { color:var(--red);background:var(--red-dim); }
+.cat-list-delete.locked { cursor:default;opacity:0.3; }
+.cat-list-delete.locked:hover { color:var(--text3);background:none; }
+</style>
+
+</body>
+</html>
