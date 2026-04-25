@@ -851,6 +851,7 @@ function renderCatList() {
       <span class="cat-list-dot" style="background:${cat.color}"></span>
       <span class="cat-list-name">${cat.label}</span>
       <span class="cat-list-badge">${isBuiltin ? 'built-in' : 'custom'}</span>
+      <button class="cat-list-rename ${isBuiltin ? 'locked' : ''}" onclick="${isBuiltin ? '' : `renameCategory('${cat.id}')`}" title="${isBuiltin ? 'Built-in categories cannot be renamed' : 'Rename category'}">${isBuiltin ? 'locked' : 'rename'}</button>
       <button class="cat-list-delete ${isBuiltin ? 'locked' : ''}" onclick="${isBuiltin ? '' : `deleteCategory('${cat.id}')`}" title="${isBuiltin ? 'Built-in categories cannot be removed' : 'Delete category'}">${isBuiltin ? 'locked' : 'delete'}</button>
     `;
     list.appendChild(item);
@@ -888,7 +889,21 @@ async function addCategory() {
   updateCounts();
   document.getElementById('newCatName').value = '';
 }
-
+async function renameCategory(id) {
+  const cat = customCats.find(c => c.id === id);
+  if (!cat) return;
+  const newName = prompt('Rename category to:', cat.label);
+  if (!newName || !newName.trim()) return;
+  const trimmed = newName.trim();
+  if (trimmed === cat.label) return;
+  cat.label = trimmed;
+  await saveCustomCats();
+  renderCatList();
+  renderSidebar();
+  renderCatDropdown();
+  updateCounts();
+  render();
+}
 async function deleteCategory(id) {
   const hasEntries = customEntries.some(e => e.cat === id);
   if (hasEntries) {
@@ -972,6 +987,11 @@ if (document.readyState === 'loading') {
 .cat-list-delete:hover { color:var(--red);background:var(--red-dim); }
 .cat-list-delete.locked { cursor:default;opacity:0.3; }
 .cat-list-delete.locked:hover { color:var(--text3);background:none; }
+.cat-list-rename { font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);background:none;border:none;cursor:pointer;padding:3px 8px;border-radius:3px;transition:color 0.15s,background 0.15s; }
+.cat-list-rename:hover { color:var(--purple-light);background:var(--purple-dim2); }
+.cat-list-rename.locked { cursor:default;opacity:0.3; }
+.cat-list-rename.locked:hover { color:var(--text3);background:none; }
+
 </style>
 
 </body>
